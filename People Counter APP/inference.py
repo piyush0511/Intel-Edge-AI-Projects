@@ -69,6 +69,9 @@ class Network:
         # Get the input layer
         self.input_blob = next(iter(self.network.inputs))
         self.output_blob = next(iter(self.network.outputs))
+        
+        supported_layers = self.plugin.query_network(network=self.network, device_name=device)
+        unsupported_layers = [l for l in self.network.layers.keys() if l not in supported_layers]
 
         return
 
