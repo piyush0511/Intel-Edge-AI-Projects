@@ -10,20 +10,16 @@ import cv2
 import argparse
 import sys
 
-class Facedet:
+class Landet:
     '''
     Class for the Face Detection Model.
     '''
-    def __init__(self, model_name, device='CPU', threshold=0.5, extensions=None):
+    def __init__(self, model_name, device='CPU', extensions=None):
         self.model_weights=model_name+'.bin'
         self.model_structure=model_name+'.xml'
         self.device=device
-        self.threshold=threshold
         self.initial_w = ''
         self.initial_h = ''
-        self.image=[]
-        self.c = 0 
-        self.v = []
         
         try:
             self.model=IENetwork(self.model_structure, self.model_weights)
@@ -49,8 +45,7 @@ class Facedet:
         status = self.net.requests[0].wait(-1)
         if status == 0:
             results = self.net.requests[0].outputs[self.output_name]
-            self.image = self.preprocess_output(results, image)
-        return self.image, self.c, self.v
+        return self.preprocess_output(results, image)
 
     def preprocess_input(self, image):
         n, c, h, w = self.input_shape
@@ -60,20 +55,14 @@ class Facedet:
         
         return image
 
-    def preprocess_output(self, results, image):
-        #print(results.shape)
-        for obj in results[0][0]:
-            if obj[2] > self.threshold:
-                xmin = int(obj[3] * self.initial_w)
-                ymin = int(obj[4] * self.initial_h)
-                xmax = int(obj[5] * self.initial_w)
-                ymax = int(obj[6] * self.initial_h)
-                self.image = image[ymin:ymax,xmin:xmax]
-                self.c = ((xmax+xmin)//2,(ymax+ymin)//2)
-                self.v = [xmin,ymin,xmax,ymax]
-                #cv2.rectangle(image, (xmin+10,ymin+10), (xmax-10,ymax-10), (0, 55, 255), 4)
-                #cv2.circle(image,self.c,30,(255,0,0),3)
-                #cv2.imshow("image",image)
-                break
+    def preprocess_output(self, results, frame):
+        l = np.squeeze(results)[2:4]
+        r = np.squeeze(results)[0:2]
+        lx = int(l[0]*self.initial_w)
+        ly = int(l[1]*self.initial_h)
+        rx = int(r[0]*self.initial_w)
+        ry = int(r[1]*self.initial_h)
+        li = frame[ly-int(self.initial_h/8):ly+int(self.initial_h/8),lx-int(self.initial_h/8):lx+int(self.initial_h/8)]
+        ri = frame[ry-int(self.initial_h/8):ry+int(self.initial_h/8),rx-int(self.initial_h/8):rx+int(self.initial_h/8)]
 
-        return self.image
+        return li, ri, [lx,ly], [rx,ry]
