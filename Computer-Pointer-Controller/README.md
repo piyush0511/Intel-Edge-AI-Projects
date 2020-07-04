@@ -67,13 +67,13 @@ python main.py --modelf /home/openvino_models/intel/intel/face-detection-adas-bi
 ### Results for DEVICE = CPU
 | Factor/Model       | All Models |
 |--------------------|---------------|
-|Load Time FP32      |  235ms        |
-|Load Time FP16      |  NA           | 
-|Load Time FP16-INT8 |  NA           |
+|Load Time FP32      |  2565ms        |
+|Load Time FP16      |  2366ms           | 
+|Load Time FP16-INT8 |  1454ms           |
 ||||||
-|Inference Time FP32 | 8.5ms         |
-|Inference Time FP16 | NA            |
-|Inference Time FP16-INT8| NA        |
+|Inference Time FP32 | 85.5ms         |
+|Inference Time FP16 | 82ms            |
+|Inference Time FP16-INT8| 79ms        |
 ||||||
 
 ## Results
