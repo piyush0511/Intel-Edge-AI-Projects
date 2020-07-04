@@ -1,27 +1,81 @@
 # Computer Pointer Controller
 
-*TODO:* Write a short introduction to your project
+Control mouse cursor by gaze estimation using OpenVino models 
+
+| Details            |              |
+|-----------------------|---------------|
+| Programming Language: |  Python 3.**6** |
+| OpenVino Version: |  2020.**2** |
+| Models Required: |face-detection-adas-binary-0001   <br /><br />landmarks-regression-retail-0009 <br /><br /> head-pose-estimation-adas-0001 <br /><br />gaze-estimation-adas-0002|
+| Hardware Used: |  Intel CPU i5 2nd gen|
+| Environment Used: |  VMware: Ubuntu 18.1|
 
 ## Project Set Up and Installation
-*TODO:* Explain the setup procedures to run your project. For instance, this can include your project directory structure, the models you need to download and where to place them etc. Also include details about how to install the dependencies your project requires.
-
+```
+├── bin
+│   └──  demo.mp4
+├── gaze.log
+├── models
+├── README.md
+├── requirements.txt
+└── src
+    ├── faced.py
+    ├── landed.py
+    ├── gazed.py
+    ├── posed.py
+    ├── main.py
+    ├── input_feeder.py
+    ├── model.py
+    └── mouse_controller.py
+```
 ## Demo
-*TODO:* Explain how to run a basic demo of your model.
+After you clone the repo, you need to install the dependecies using this command
+```
+pip3 install -r requirements.txt
+```
+After that you need to download OpenVino required models using `model downloader`.
+* face-detection-adas-binary-0001
+* landmarks-regression-retail-0009 
+* head-pose-estimation-adas-0001 
+* gaze-estimation-adas-0002
 
 ## Documentation
-*TODO:* Include any documentation that users might need to better understand your project code. For instance, this is a good place to explain the command line arguments that your project supports.
+```
+usage: main.py [-h] --modelf MODELF --modelp MODELP --modell MODELL --modelg
+               MODELG [--flag FLAG] [--device DEVICE] [--video VIDEO]
+               [--threshold THRESHOLD]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --modelf MODELF       Face Model
+  --modelp MODELP       Head Pose Model
+  --modell MODELL       Landmarks Model
+  --modelg MODELG       Gaze Model
+  --flag FLAG           Display Face (if yes type 'yes')
+  --device DEVICE       Device
+  --video VIDEO         Path to the video file
+  --threshold THRESHOLD
+                        Threshold
+
+```
+## Run command: 
+```
+python main.py --modelf /home/openvino_models/intel/intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001 --modelp /home/openvino_models/intel/intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001 --modell /home/openvino_models/intel/intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009 --modelg /home/openvino_models/intel/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002 #--flag yes
+```
 
 ## Benchmarks
-*TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+### Results for DEVICE = CPU
+| Factor/Model       | All Models |
+|--------------------|---------------|
+|Load Time FP32      |  235ms        |
+|Load Time FP16      |  NA           | 
+|Load Time FP16-INT8 |  NA           |
+||||||
+|Inference Time FP32 | 8.5ms         |
+|Inference Time FP16 | NA            |
+|Inference Time FP16-INT8| NA        |
+||||||
 
 ## Results
-*TODO:* Discuss the benchmark results and explain why you are getting the results you are getting. For instance, explain why there is difference in inference time for FP32, FP16 and INT8 models.
-
-## Stand Out Suggestions
-This is where you can provide information about the stand out suggestions that you have attempted.
-
-### Async Inference
-If you have used Async Inference in your code, benchmark the results and explain its effects on power and performance of your project.
-
-### Edge Cases
-There will be certain situations that will break your inference flow. For instance, lighting changes or multiple people in the frame. Explain some of the edge cases you encountered in your project and how you solved them to make your project more robust.
+* Load time for models with FP32 is less than FP16 and the same for FP16 models is less than INT8. 
+* Inference time for models with FP32 is larger than FP16 and  Inference time for FP16 models is larger than INT8. 
