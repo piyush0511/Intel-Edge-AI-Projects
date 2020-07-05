@@ -40,7 +40,9 @@ def build_camera_matrix(center_of_face, focal_length):
 
 
 
-def draw_axes(frame, center_of_face, yaw, pitch, roll, scale, focal_length,):
+def draw_axes(frame, center_of_face, yaw, pitch, roll):
+	focal_length = 950.0
+	scale = 50
 	yaw *= np.pi / 180.0
 	pitch *= np.pi / 180.0
 	roll *= np.pi / 180.0
@@ -158,13 +160,12 @@ def main(args):
 			yaw = val[0][0]
 			pitch = val[0][1]
 			roll = val[0][2]
-			focal_length = 950.0
-			scale = 50
+			
 
 			# display results and frame
 			if args.flag == "yes":
 				#ref: https://knowledge.udacity.com/questions/171017
-				frame = draw_axes(frame, c, yaw, pitch, roll, scale, focal_length)
+				frame = draw_axes(frame, c, yaw, pitch, roll)
 				frame = draw_arrow(frame, cord, l, r,results)
 				cv2.imshow("frame",frame)
 			key = cv2.waitKey(1) & 0xFF
