@@ -120,25 +120,22 @@ def main(args):
 	logging.info("Model: {:.1f}ms".format(1000 * (time.time() - start_time)) )
 	logging.info("==============  End =====================") 
 	m= MouseController("low", "fast")
-
-
 	if args.video is not None:
-		cap=cv2.VideoCapture(args.video)
+		feed=InputFeeder(input_type='video', input_file=args.video)
 	else:
-		cap=cv2.VideoCapture(0)
+		feed=InputFeeder(input_type='cam')
 
+	initial_w, initial_h = feed.load_data()
 
-	initial_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-	initial_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 	time.sleep(3)
 
 	try:
-		while True:
+		for ret, frame in feed.next_batch():
 			
-			ret,frame = cap.read()
 
 			if not ret:
-				continue	
+				break
+	
 			frame = cv2.flip(frame,1)
 			t=time.time()
 
@@ -163,19 +160,19 @@ def main(args):
 			
 
 			# display results and frame
-			if args.flag == "yes":
+			if args.verbose == "yes":
 				#ref: https://knowledge.udacity.com/questions/171017
 				frame = draw_axes(frame, c, yaw, pitch, roll)
 				frame = draw_arrow(frame, cord, l, r,results)
 				cv2.imshow("frame",frame)
-			key = cv2.waitKey(1) & 0xFF
+				key = cv2.waitKey(1) & 0xFF
 
 			# if the `q` key was pressed, break from the loop
 			if key == ord("q"):
 				break
 
 		cv2.destroyAllWindows()
-		cap.release()
+		feed.close()
 
 	except Exception as ex:
 		logging.exception("Error in inference:" + str(ex))
@@ -189,7 +186,7 @@ if __name__=='__main__':
 	parser.add_argument('--modelp', required=True, help="Head Pose Model")
 	parser.add_argument('--modell', required=True, help="Landmarks Model")
 	parser.add_argument('--modelg', required=True, help="Gaze Model")
-	parser.add_argument('--flag', default="None", help=" Display Face (if yes type 'yes')")
+	parser.add_argument('--verbose', default="None", help=" Display Face (if yes type 'yes')")
 	parser.add_argument('--device', default='CPU', help="Device")
 	parser.add_argument('--video', default=None, help="Path to the video file")
 	parser.add_argument('--threshold', default=0.60, help="Threshold")

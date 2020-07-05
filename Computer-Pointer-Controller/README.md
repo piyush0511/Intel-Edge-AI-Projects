@@ -42,7 +42,7 @@ After that you need to download OpenVino required models using `model downloader
 ## Documentation
 ```
 usage: main.py [-h] --modelf MODELF --modelp MODELP --modell MODELL --modelg
-               MODELG [--flag FLAG] [--device DEVICE] [--video VIDEO]
+               MODELG [--verbose VERBOSE] [--device DEVICE] [--video VIDEO]
                [--threshold THRESHOLD]
 
 optional arguments:
@@ -51,7 +51,7 @@ optional arguments:
   --modelp MODELP       Head Pose Model
   --modell MODELL       Landmarks Model
   --modelg MODELG       Gaze Model
-  --flag FLAG           Display Face (if yes type 'yes')
+  --verbose VERBOSE           Display Face (if yes type 'yes')
   --device DEVICE       Device
   --video VIDEO         Path to the video file
   --threshold THRESHOLD
@@ -60,20 +60,20 @@ optional arguments:
 ```
 ## Run command: 
 ```
-python main.py --modelf /home/openvino_models/intel/intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001 --modelp /home/openvino_models/intel/intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001 --modell /home/openvino_models/intel/intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009 --modelg /home/openvino_models/intel/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002 #--flag yes
+python main.py --modelf /home/openvino_models/intel/intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001 --modelp /home/openvino_models/intel/intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001 --modell /home/openvino_models/intel/intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009 --modelg /home/openvino_models/intel/intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002 #--verbose yes
 ```
 
 ## Benchmarks
 ### Results for DEVICE = CPU
-| Factor/Model       | All Models |
+| Factor | Model |
 |--------------------|---------------|
-|Load Time FP32      |  2565ms        |
+|Load Time FP32      |  2565ms       |
 |Load Time FP16      |  2366ms           | 
-|Load Time FP16-INT8 |  1454ms           |
+|Load Time FP16-INT8 |  1454ms          |
 ||||||
-|Inference Time FP32 | 85.5ms         |
-|Inference Time FP16 | 82ms            |
-|Inference Time FP16-INT8| 79ms        |
+|Inference Time FP32 | 85.5ms        |
+|Inference Time FP16 | 82ms          |
+|Inference Time FP16-INT8| 79ms       |
 ||||||
 
 ## Results
