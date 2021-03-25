@@ -30,7 +30,7 @@ PyRect==0.1.4
 PyScreeze==0.1.26
 python3-xlib==0.15
 PyTweening==1.0.3
-PyYAML==5.3.1
+PyYAML==5.4
 query-string==2019.4.13
 request==2019.4.13
 requests==2.24.0
